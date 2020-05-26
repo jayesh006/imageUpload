@@ -2,7 +2,7 @@ import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/cont
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import { ActionSheetController, AlertController, NavController } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ModalController } from '@ionic/angular';
 import { ModelPagePage } from '../model/model-page/model-page.page';
@@ -35,7 +35,8 @@ export class HomePage {
     private alertCtrl: AlertController,
     private socialSharing: SocialSharing,
     private model: ModalController,
-    private ocr: OCR
+    private ocr: OCR,
+    private navCtrl: NavController
   ) { }
 
   public lunch = {
@@ -224,6 +225,9 @@ export class HomePage {
   }
 
 
+  graph(){
+    this.navCtrl.navigateForward('graph');
+  }
 
 
 }
