@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>modelPage</ion-title>
+
+    <ion-buttons slot='end'>
+      <ion-button (click)='closeModal()'>
+        <ion-icon slot='icon-only' name='close'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-text>
+    <p>
+      Lunch : <strong>{{lunch | json}}</strong>
+    </p>
+  </ion-text>
+
+  <ion-text>
+    <p>
+      Dinner (Modal Data) : <strong>{{dinner | json}}</strong>
+    </p>
+  </ion-text>
+
+</ion-content>
