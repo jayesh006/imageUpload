@@ -7,6 +7,8 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ModalController } from '@ionic/angular';
 import { ModelPagePage } from '../model/model-page/model-page.page';
 import { OCR, OCRSourceType, OCRResult } from '@ionic-native/ocr/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +38,9 @@ export class HomePage {
     private socialSharing: SocialSharing,
     private model: ModalController,
     private ocr: OCR,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private qrScanner: QRScanner,
+    private callNum: CallNumber
   ) { }
 
   public lunch = {
@@ -194,8 +198,8 @@ export class HomePage {
 
   }
 
-  ocrFun(){
-    
+  ocrFun() {
+
     const options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
@@ -205,13 +209,13 @@ export class HomePage {
     }
     this.camera.getPicture(options).then((imageData) => {
       console.log(imageData);
-      this.ocr.recText(OCRSourceType.NORMFILEURL, imageData).then((res:OCRResult) => {
+      this.ocr.recText(OCRSourceType.NORMFILEURL, imageData).then((res: OCRResult) => {
         // console.log(JSON.stringify(res));
         console.log(res.blocks.blocktext);
-        
+
       }).catch((error: any) => {
-        console.log('error : '+error,JSON.stringify(error));
-        
+        console.log('error : ' + error, JSON.stringify(error));
+
       });
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
@@ -221,14 +225,63 @@ export class HomePage {
 
       // Handle error
     });
-    
+
   }
 
 
-  graph(){
+  graph() {
     this.navCtrl.navigateForward('graph');
   }
 
+
+  QRScanner() {
+
+    // return
+
+    this.qrScanner.prepare()
+      .then((status: QRScannerStatus) => {
+        console.log('QR');
+        if (status.authorized) {
+          // camera permission was granted
+
+
+          // start scanning
+          let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+            console.log('Scanned something', text);
+
+            this.qrScanner.hide(); // hide camera preview
+            scanSub.unsubscribe(); // stop scanning
+          });
+
+        } else if (status.denied) {
+          console.log('permission denied 1');
+          // camera permission was permanently denied
+          // you must use QRScanner.openSettings() method to guide the user to the settings page
+          // then they can grant the permission from there
+        } else {
+          // permission was denied, but not permanently. You can ask for permission again at a later time.
+          console.log('permission denied 2');
+
+        }
+      })
+      .catch((e: any) => console.log('Error is', e));
+  }
+
+
+  circulerProgress() {
+    this.navCtrl.navigateForward('progress-circle');
+  }
+
+
+  callNumber() {
+    this.callNum.callNumber('9920453459', true).then(res => {
+      console.log('res : ', res);
+
+    }).catch(err => {
+      console.log('error : ', err);
+
+    });
+  }
 
 }
 
