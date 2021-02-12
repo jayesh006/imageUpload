@@ -36,7 +36,7 @@ export class AppComponent {
 
         this.appVersion.getAppName().then(value => {
           // this.AppName = value;
-          // console.log(value);
+          console.log(value);
         }).catch(err => {
           alert(err);
         });
