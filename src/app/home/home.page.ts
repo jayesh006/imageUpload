@@ -9,6 +9,8 @@ import { ModelPagePage } from '../model/model-page/model-page.page';
 import { OCR, OCRSourceType, OCRResult } from '@ionic-native/ocr/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { Pedometer } from '@ionic-native/pedometer/ngx';
+import { Stepcounter } from '@ionic-native/stepcounter/ngx';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +42,9 @@ export class HomePage {
     private ocr: OCR,
     private navCtrl: NavController,
     private qrScanner: QRScanner,
-    private callNum: CallNumber
+    private callNum: CallNumber,
+    private padometer: Pedometer,
+    private stepCounts: Stepcounter
   ) { }
 
   public lunch = {
@@ -281,6 +285,24 @@ export class HomePage {
       console.log('error : ', err);
 
     });
+  }
+
+  callPadometer() {
+    this.padometer.isDistanceAvailable()
+      .then((available: boolean) => console.log('Available :: ', available))
+      .catch((error: any) => console.log('Error @@', error));
+
+    this.padometer.startPedometerUpdates()
+      .subscribe((data: any) => {
+        console.log('Data @@@@ ', data);
+      });
+  }
+
+  stepCount() {
+    let startingOffset = 0;
+    this.stepCounts.start(startingOffset).then(onSuccess => console.log('stepcounter-start success', onSuccess), onFailure => console.log('stepcounter-start error', onFailure));
+
+    this.stepCounts.getHistory().then(historyObj => console.log('stepcounter-history success', historyObj), onFailure => console.log('stepcounter-history error', onFailure));
   }
 
 }
